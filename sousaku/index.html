@@ -1,11 +1,227 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>はじめてのサイト</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>設定帳</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#000;--s1:#0c0c0c;--s2:#161616;--ln:#2a2a2a;--tx:#e8e8e8;--mu:#8a8a8a;--ac:#d9d9d9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.8 "Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:var(--s2);border:1px solid var(--ln);border-radius:6px;padding:.4em .9em}
+button:hover{border-color:var(--mu)}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+input,textarea,select{background:var(--s1);border:1px solid var(--ln);border-radius:6px;padding:.45em .7em;width:100%}
+textarea{min-height:9em;resize:vertical}
+header.top{display:flex;align-items:center;gap:.5em;padding:.7em 1em;border-bottom:1px solid var(--ln)}
+header.top h1{font-size:1.05rem;margin:0 auto 0 0;letter-spacing:.12em;font-weight:600}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 3.4em)}
+#side{border-right:1px solid var(--ln);padding:1em;display:flex;flex-direction:column;gap:.5em}
+.item{display:flex;align-items:center;gap:.8em;text-align:left;width:100%;background:none;border:1px solid transparent;padding:.6em}
+.item i{width:6px;align-self:stretch;background:var(--ac);border-radius:3px}
+.item span{display:flex;flex-direction:column;min-width:0}
+.item b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item small{color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item.on{background:var(--s2);border-color:var(--ln)}
+#detail{padding:1.5em;max-width:980px;width:100%;--ac:#d9d9d9}
+.empty{color:var(--mu);padding:2em 0}
+.bar{display:flex;gap:.5em;margin-bottom:1.2em;flex-wrap:wrap}
+.bar .sp{margin-right:auto}
+.pri{background:var(--ac);color:var(--acf,#000);border-color:var(--ac);font-weight:600}
+.pri:hover{border-color:var(--ac);opacity:.88}
+.hero{display:grid;grid-template-columns:minmax(0,320px) 1fr;gap:1.8em;align-items:start}
+.stage{aspect-ratio:3/4;background:var(--s1);border:1px solid var(--ln);border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y;color:var(--mu)}
+.stage img{width:100%;height:100%;object-fit:contain}
+.thumbs{display:flex;gap:.5em;margin-top:.6em;overflow-x:auto;padding-bottom:.3em}
+.th{flex:none;width:64px;text-align:center;font-size:.72rem;color:var(--mu);background:none;border:0;padding:0}
+.th img{width:64px;height:80px;object-fit:cover;border:2px solid var(--ln);border-radius:5px;display:block}
+.th.on img{border-color:var(--ac)}
+.th.on{color:var(--tx)}
+.imgrow{display:flex;gap:.4em;margin-top:.4em;flex-wrap:wrap}
+.imgrow input{flex:1 1 8em}
+h2.name{font-size:2rem;line-height:1.25;margin:0 0 .6em;padding-bottom:.4em;border-bottom:2px solid var(--ac);font-weight:700}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7em 1.2em;margin:0}
+.kv div{min-width:0}
+.kv dt{color:var(--mu);font-size:.78rem}
+.kv dd{margin:0;overflow-wrap:anywhere}
+.sec{margin-top:2em}
+.sec h3{font-size:.9rem;color:var(--mu);margin:0 0 .6em;font-weight:600;border-left:3px solid var(--ac);padding-left:.6em}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.8em}
+.stat{background:var(--s1);border:1px solid var(--ln);border-radius:8px;padding:.6em .8em}
+.stat small{color:var(--mu);letter-spacing:.08em}
+.stat b{display:block;font-size:1.6rem;line-height:1.2}
+.stat u{display:block;height:3px;background:var(--ln);margin-top:.4em;text-decoration:none}
+.stat u::after{content:"";display:block;height:100%;width:var(--w);background:var(--ac)}
+.stat input{margin-top:.2em;font-size:1.2rem}
+.txt{white-space:pre-wrap;overflow-wrap:anywhere}
+#detail{border-top:3px solid var(--ac)}
+.stat b{color:var(--ac)}
+.stage{border-color:var(--ac)}
+.item.on{border-color:var(--ac)}
+.colbox{margin-bottom:1em;padding:.7em;border:1px solid var(--ln);border-radius:8px;background:var(--s1)}
+.colbox .row{display:flex;flex-wrap:wrap;gap:.5em;align-items:center;margin-top:.4em}
+.sw{width:30px;height:30px;padding:0;border-radius:50%;border:2px solid var(--ln)}
+.sw.on{border-color:#fff}
+.colbox input[type=color]{width:3.2em;height:2.4em;padding:2px}
+.edit .kv{grid-template-columns:repeat(2,minmax(0,1fr))}
+iframe{width:100%;height:220px;border:0;border-radius:8px;background:var(--s1)}
+a{color:var(--ac)}
+dialog{background:var(--s1);color:var(--tx);border:1px solid var(--ln);border-radius:10px;width:min(560px,94vw);padding:1em}
+dialog::backdrop{background:#000c}
+.frow{display:grid;grid-template-columns:auto auto 1fr 7em auto;gap:.3em;margin-bottom:.4em}
+.frow button{padding:.3em .6em}
+.toast{position:fixed;left:50%;bottom:calc(1.2em + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:#000;padding:.5em 1em;border-radius:6px;z-index:9}
+.only-m{display:none}
+@media(max-width:760px){
+ .app{grid-template-columns:1fr}
+ body:not(.det) #detail{display:none}
+ body.det #side{display:none}
+ .only-m{display:inline-block}
+ .hero{grid-template-columns:1fr}
+ .stage{max-width:340px;margin:0 auto;width:100%}
+ .stats{grid-template-columns:repeat(2,1fr)}
+ #detail{padding:1em}
+ h2.name{font-size:1.6rem}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
 <body>
-  <h1>こんにちは！</h1>
-  <p>はじめてのホームページです。</p>
+<header class="top">
+ <h1>設定帳</h1>
+ <button data-act="export">書き出し</button>
+ <button data-act="import">読み込み</button>
+ <input type="file" id="fimp" accept=".json,application/json" hidden>
+</header>
+<div class="app">
+ <aside id="side"><button class="pri" data-act="new">新規キャラクター</button><div id="list"></div></aside>
+ <main id="detail"></main>
+</div>
+<dialog id="dlg"><h3 style="margin-top:0">項目の編集</h3><p style="color:var(--mu);margin-top:0">名前・能力値以外の項目を追加、並べ替え、削除できます。削除した項目の入力内容も消えます。</p><div id="frows"></div><div class="bar" style="margin-top:1em"><button data-act="addf">項目を追加</button><span class="sp"></span><button class="pri" data-act="closef">閉じる</button></div></dialog>
+<dialog id="cfm"><p id="cfmt" style="margin-top:0"></p><form method="dialog" class="bar" style="margin:0"><span class="sp"></span><button value="no">キャンセル</button><button value="ok" class="pri">はい</button></form></dialog>
+<script>
+const $=s=>document.querySelector(s);
+function ask(m){return new Promise(r=>{const d=$('#cfm');$('#cfmt').textContent=m;d.returnValue='no';d.onclose=()=>r(d.returnValue==='ok');d.showModal()})}
+const STATS=['STR','CON','POW','DEX','APP','SIZ','INT','EDU'];
+const L=(id,label,type)=>({id,label,type:type||'text'});
+const DEF=()=>[L('gender','性別'),L('birthday','誕生日'),L('org','組織(職業)'),L('role','役職'),L('blood','血液型'),L('height','身長'),L('weight','体重'),L('personality','性格','long'),L('bio','経歴','long'),L('memo','メモ','long')];
+const KEY='settei-cho-v1';
+let S={fields:DEF(),chars:[]},sel=null,edit=false,gi=0,playing=false;
+try{const j=localStorage.getItem(KEY);if(j)S=JSON.parse(j)}catch(e){}
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cur=()=>S.chars.find(c=>c.id===sel);
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('保存できませんでした。画像が多すぎる可能性があります。書き出しでバックアップしてください。')}}
+let tt;function toast(m){document.querySelectorAll('.toast').forEach(e=>e.remove());const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);clearTimeout(tt);tt=setTimeout(()=>d.remove(),3200)}
+const yt=u=>{const m=(u||'').match(/(?:[?&]v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);return m&&m[1]};
+
+const GD=['男性','女性','ノンバイナリー','Xジェンダー','トランスジェンダー男性','トランスジェンダー女性','ジェンダークィア','アジェンダー','不明・非公開','その他'];
+const fg=h=>{const n=parseInt(h.slice(1),16);return ((n>>16&255)*299+(n>>8&255)*587+(n&255)*114)/1000>140?'#000':'#fff'};
+const PRE=['#d9d9d9','#e5484d','#f5a524','#f2d94e','#3ecf8e','#3ea6ff','#8b5cf6','#ff6fb5'];
+const MD=[31,29,31,30,31,30,31,31,30,31,30,31];
+const ST=[['ガーネット','真実・友愛'],['アメジスト','誠実・心の平和'],['アクアマリン','沈着・勇敢'],['ダイヤモンド','清浄無垢・永遠の絆'],['エメラルド','幸運・幸福'],['パール','健康・長寿'],['ルビー','情熱・仁愛'],['ペリドット','夫婦の幸福・和合'],['サファイア','慈愛・誠実'],['オパール','希望・幸福'],['トパーズ','友情・希望'],['ターコイズ','成功・繁栄']];
+const FL=[['スイセン','尊敬'],['フリージア','無邪気'],['スイートピー','優しい思い出'],['サクラ','精神の美'],['スズラン','純粋・再び幸せが訪れる'],['バラ','愛・美'],['アサガオ','愛情・固い絆'],['ヒマワリ','あなただけを見つめる'],['コスモス','乙女の真心・調和'],['キク','高貴・高潔'],['ダリア','華麗・感謝'],['ポインセチア','祝福・幸運を祈る']];
+const FD=['マツ:不老長寿/ウメ:忍耐/ツバキ:控えめな美/ナンテン:私の愛は増すばかり/フクジュソウ:幸せを招く/ストック:愛の絆/セリ:清廉で高潔/シクラメン:内気/スイセン:尊敬/ロウバイ:慈愛/サザンカ:困難に打ち勝つ/カトレア:優雅な女性/キンセンカ:慈愛/ヒヤシンス:変わらぬ愛/パンジー:思慮深い/ビオラ:誠実/ジンチョウゲ:栄光/ミモザ:秘かな愛/ガーベラ:希望/ナズナ:すべてを捧げます/クロッカス:青春の喜び/ラナンキュラス:魅力的/ハボタン:祝福/スノードロップ:希望/カスミソウ:幸福/シンビジウム:誠実な愛情/ミズバショウ:美しい思い出/ヒイラギ:先見の明/ユキヤナギ:愛らしさ/オキザリス:輝く心/アネモネ:期待',
+'フリージア:親愛の情/ネコヤナギ:自由/ヒイラギナンテン:激しい感情/ボケ:先駆者/ツルニチニチソウ:楽しい思い出/スミレ:誠実/ヒメオドリコソウ:愛嬌/ナノハナ:快活/モモ:チャーミング/レンギョウ:希望/ウメ:高潔/ハコベ:ささやかな愛/マンサク:霊感/チューリップ:思いやり/キンギョソウ:おしゃべり/ノースポール:誠実/ヒメリュウキンカ:幸せ/ミツマタ:強靭/サンシュユ:持続/アイリス:吉報/ルピナス:貪欲/シネラリア:快活/アセビ:犠牲/ヒヤシンス:勝負/ワスレナグサ:真実の愛/ネモフィラ:可憐/デージー:平和/ハナニラ:悲しい別れ/ミモザ:友情',
+'スイートピー:優しい思い出/ヒメウズ:愛らしさ/モモ:天下無敵/ユキワリソウ:忍耐/サクラソウ:運命を開く/ハナミズキ:返礼/ツツジ:節度/ミモザ:感謝/スミレ:謙虚/ヤマブキ:気品/ジンチョウゲ:不死/ゼラニウム:愛情/アーモンド:希望/ヒヤシンス:思いやり/ブルーベル:変わらぬ心/プリムラ:青春の恋/カタクリ:初恋/ハナカイドウ:温和/コブシ:友愛/フキノトウ:待望/サクラ:優れた美人/デイジー:無邪気/ビオラ:信頼/ヤグルマギク:幸福感/ライラック:友情/ヒナギク:純潔/アネモネ:はかない恋/モクレン:自然への愛/ボタン:誠実/ゲッケイジュ:栄光/カランコエ:幸福を告げる',
+'サクラ:精神の美/チューリップ:愛の告白/ライラック:思い出/ハナズオウ:裏切り/ヤエザクラ:しとやか/ミヤコワスレ:しばしの憩い/ハナミズキ:永続性/フジ:優しさ/シバザクラ:合意/ツツジ:愛の喜び/リンゴ:誘惑/アヤメ:希望/ナデシコ:純愛/ライラック:恋の芽生え/ジャスミン:優美/クレマチス:美しい心/ボタン:王者の風格/カモミール:逆境で生まれる力/ムスカリ:通じ合う心/シャクヤク:はにかみ/ネモフィラ:どこでも成功/ルピナス:いつも幸せ/ワスレナグサ:私を忘れないで/キンポウゲ:子供らしさ/カーネーション:純粋な愛/ポピー:思いやり/フジ:歓迎/サクランボ:小さな幸せ/ツクシ:向上心/スイカズラ:愛の絆',
+'スズラン:純粋/ハナショウブ:嬉しい知らせ/クレマチス:精神の美/ツツジ:努力/ショウブ:勇気/カキツバタ:幸運が必ず来る/ハルジオン:追想の愛/シャクヤク:恥じらい/ノイバラ:素朴な愛/カーネーション:母への愛/ジャスミン:愛想のよい/ヒナゲシ:慰め/バラ:愛情/ゼラニウム:君がいて幸せ/ブーゲンビリア:情熱/ナスタチウム:困難に打ち勝つ/マーガレット:真実の愛/ライラック:青春の思い出/エニシダ:謙遜/アイリス:恋のメッセージ/ハルシャギク:一目惚れ/スカビオサ:恋の悩み/ベロニカ:忠実/クローバー:幸運/ヤグルマソウ:繊細/ホタルブクロ:誠実/ガクアジサイ:謙虚/ブルーデージー:幸福/キンレンカ:愛国心/ギボウシ:静けさ/ブルースター:幸福な愛',
+'バラ:愛・美/アジサイ:元気な女性/ラベンダー:あなたを待っています/カモミール:親交/ハナショウブ:優しい心/クチナシ:喜びを運ぶ/ネジバナ:思慕/ホタルブクロ:忠実/ユリ:純粋/ガクアジサイ:ひたむきな愛/ビヨウヤナギ:きらめき/グラジオラス:勝利/ヤマユリ:威厳/ノウゼンカズラ:名声/ハス:清らかな心/ツユクサ:なつかしい関係/トケイソウ:聖なる愛/テッセン:高潔/ナツツバキ:はかない美しさ/アガパンサス:恋の訪れ/ハンゲショウ:内に秘めた情熱/カンパニュラ:感謝/ダリア:優雅/ペチュニア:心の安らぎ/ヒペリカム:きらめき/バーベナ:家族愛/ジギタリス:熱愛/エキナセア:深い愛/アスチルベ:恋の訪れ/ハマナス:照れ屋',
+'ヒマワリ:憧れ/ユリ:威厳/アサガオ:儚い恋/ハイビスカス:新しい恋/トルコギキョウ:優美/カンナ:情熱/オジギソウ:敏感/タチアオイ:大きな志/ホオズキ:偽り/サルビア:家族愛/ノウゼンカズラ:女性の美/マツバボタン:無邪気/ヒャクニチソウ:不在の友を思う/ブルーサルビア:燃える思い/ハス:雄弁/ゼニアオイ:恩恵/ムクゲ:信念/ジニア:絆/フロックス:合意/ヤグルマソウ:幸福/キキョウ:変わらぬ愛/ミソハギ:純真な愛情/ルドベキア:正義/ケイトウ:おしゃれ/ナデシコ:大胆/ヘリオトロープ:献身/ブッドレア:恋の予感/ネムノキ:歓喜/アガパンサス:知的な装い/ベゴニア:幸福な日々/ダチュラ:偽りの魅力',
+'ヒマワリ:あなただけを見つめる/ホウセンカ:私に触れないで/ノウゼンカズラ:栄光/アサガオ:固い絆/フヨウ:繊細な美/マリーゴールド:変わらぬ愛/ユウガオ:夜の思い出/ハス:神聖/ゲンノショウコ:心の強さ/ナデシコ:純粋な愛/ブルーサルビア:尊敬/グロリオサ:栄光/ハゲイトウ:不老不死/キョウチクトウ:注意/ムクゲ:新しい美/オシロイバナ:臆病な愛/ケイトウ:色あせぬ恋/ススキ:活力/カンナ:永遠/ヒャクニチソウ:絆/ミズヒキ:慶びの贈り物/ベンケイソウ:静穏/クルクマ:あなたに夢中/ハギ:思案/サルスベリ:雄弁/ガーベラ:常に前進/フジバカマ:ためらい/ワレモコウ:変化/ヒオウギ:誠実/リンドウ:正義/キキョウ:誠実',
+'コスモス:乙女の真心/ハギ:内気/オミナエシ:美人/ススキ:心が通じる/ヒガンバナ:再会/ホトトギス:永遠にあなたのもの/クズ:根気/ナデシコ:貞節/キク:高貴/ダリア:移り気/リンドウ:悲しんでいるあなたを愛する/ケイトウ:情愛/オトギリソウ:恨み/ガウラ:繊細な心/サフラン:歓喜/シュウメイギク:薄れゆく愛/アキノキリンソウ:用心/アスター:追憶/サルビア:尊敬/ミセバヤ:大切なあなた/タデ:献身/リコリス:あきらめ/ホトトギス:秘めたる思い/トリカブト:栄光/エノコログサ:愛嬌/ツリフネソウ:私に触れないで/ムラサキシキブ:聡明/コスモス:調和/ヤマハギ:思い/キンモクセイ:謙虚',
+'キンモクセイ:陶酔/キク:高潔/ダリア:華麗/ナナカマド:慎重/リンドウ:誠実/ヒイラギモクセイ:用心深さ/エリカ:孤独/ノコンギク:守護/サフラン:過度をつつしめ/カリン:唯一の恋/シュウカイドウ:片思い/パンパスグラス:光輝/ガーベラ:神秘/ホトトギス:永遠/ホオズキ:自然美/ナデシコ:思慕/アキノノゲシ:幸せな旅/ウメモドキ:知性/バラ:愛情/ベゴニア:親切/カンギク:誠実/ゲンペイコギク:想い/ハナトラノオ:希望/コスモス:真心/ミズヒキ:感謝/ユーカリ:再生/ツワブキ:困難に傷つかない/ススキ:憂い/ツタ:永遠の愛/カエデ:大切な思い出/カボチャ:広大',
+'サザンカ:ひたむきさ/ガーベラ:希望/キク:思慮深い/ツワブキ:謙譲/ヤツデ:分別/ホワイトレースフラワー:可憐な心/シクラメン:思いやり/ビワ:温和/ツバキ:誇り/ダリア:感謝/ポインセチア:幸運を祈る/リンドウ:勝利/ワイルドストロベリー:幸福な家庭/ストック:永遠の美/ピラカンサ:愛嬌/サフラン:喜び/ブバルディア:交わり/キクイモ:美しい人/ユキノシタ:切実な愛情/ノギク:守護/シャコバサボテン:一時の美/ヒイラギ:歓迎/ツバキ:控えめな優しさ/フユザクラ:冷静/ネリネ:また会う日を楽しみに/マリーゴールド:友情/ハボタン:利益/クリスマスローズ:慰め/カトレア:成熟した魅力/ガーベラ:親しみやすい',
+'ポインセチア:祝福/シクラメン:憧れ/クリスマスローズ:追憶/ヒイラギ:先見/サザンカ:理想の恋/ナンテン:良い家庭/ストック:愛情の絆/カトレア:魅惑的/セイヨウヒイラギ:家庭の幸せ/ツバキ:理想の愛/スイセン:神秘/フクジュソウ:幸せを招く/ロウバイ:先見/ハボタン:慈愛/アロエ:健康/ビオラ:誠実/ノースポール:冬のぬくもり/カランコエ:たくさんの小さな思い出/マツ:変わらぬ愛/ユズ:健康美/ウメ:不屈の精神/ミカン:純潔/ヒヤシンス:変わらぬ愛/モミ:昇進/バラ:あふれる愛/クロッカス:切望/ストック:思いやり/ハナカンザシ:希望/シンビジウム:素朴/キンカン:思い出/カスミソウ:感謝'].map(s=>s.split('/').map(x=>x.split(':')));
+function svG(f,c){const v=c.f.gender||'',o=(!v||GD.includes(v))?GD:[...GD,v];return edit?`<div><dt>${esc(f.label)}</dt><dd><select data-f="gender"><option value="">未選択</option>${o.map(x=>`<option${x===v?' selected':''}>${esc(x)}</option>`).join('')}</select></dd></div>`:`<div><dt>${esc(f.label)}</dt><dd>${esc(v)||'—'}</dd></div>`}
+function svB(f,c){const b=c.bd||{};if(!edit)return `<div><dt>${esc(f.label)}</dt><dd>${b.m?b.m+'月'+(b.d?b.d+'日':''):esc(c.f.birthday)||'—'}</dd></div>`;const n=b.m?MD[b.m-1]:31;let m='<option value="">月</option>',d='<option value="">日</option>';for(let i=1;i<=12;i++)m+=`<option value="${i}"${b.m===i?' selected':''}>${i}月</option>`;for(let i=1;i<=n;i++)d+=`<option value="${i}"${b.d===i?' selected':''}>${i}日</option>`;return `<div><dt>${esc(f.label)}</dt><dd style="display:flex;gap:.4em"><select data-bd="m" aria-label="月">${m}</select><select data-bd="d" aria-label="日">${d}</select></dd></div>`}
+function birthInfo(c){const m=c.bd&&c.bd.m;if(!m)return '';const s=ST[m-1],dd=c.bd.d,f=(dd&&FD[m-1][dd-1])||FL[m-1];return `<dl class="kv" style="margin-top:.9em"><div><dt>誕生石(${m}月)</dt><dd>${s[0]}<br><small style="color:var(--mu)">石言葉: ${s[1]}</small></dd></div><div><dt>誕生花(${m}月${dd?dd+'日':''})</dt><dd>${f[0]}<br><small style="color:var(--mu)">花言葉: ${f[1]}</small></dd></div></dl>`}
+function rList(){
+ $('#list').innerHTML=S.chars.map(c=>`<button class="item${c.id===sel?' on':''}" data-act="open" data-id="${c.id}" style="--ac:${esc(c.color)}"><i></i><span><b>${esc(c.name||'名称未設定')}</b><small>${esc([c.f.org,c.f.role].filter(Boolean).join(' / '))}</small></span></button>`).join('')||'<p class="empty">まだキャラクターがいません。「新規キャラクター」から作成できます。</p>';
+}
+function rDetail(){
+ const el=$('#detail'),c=cur();
+ if(!c){el.innerHTML='<p class="empty">一覧からキャラクターを選ぶか、新しく作成してください。</p>';return}
+ el.style.setProperty('--ac',c.color);el.style.setProperty('--acf',fg(c.color));el.className=edit?'edit':'';
+ if(gi>=c.imgs.length)gi=0;
+ const im=c.imgs[gi],id=yt(c.music);
+ const short=S.fields.filter(f=>f.type==='text'),long=S.fields.filter(f=>f.type==='long');
+ const bar=`<div class="bar"><button class="only-m" data-act="back">一覧へ</button><span class="sp"></span>${edit?`<button data-act="fields">項目を編集</button><button data-act="del">削除</button><button class="pri" data-act="done">完了</button>`:`<button class="pri" data-act="edit">編集</button>`}</div>`;
+ const stage=`<div class="stage" id="stage">${im?`<img src="${im.src}" alt="${esc(im.label||c.name)}">`:'立ち絵なし'}</div>
+  ${c.imgs.length>1||edit?`<div class="thumbs">${c.imgs.map((m,i)=>`<button class="th${i===gi?' on':''}" data-act="pick" data-i="${i}"><img src="${m.src}" alt=""><span>${esc(m.label||(m.id===c.main?'メイン':'画像'+(i+1)))}</span></button>`).join('')}</div>`:''}
+  ${edit?`<div class="imgrow"><button data-act="addimg">画像を追加</button>${im?`<input data-im="label" value="${esc(im.label)}" placeholder="ラベル(例: 通常、笑顔)" aria-label="画像のラベル"><button data-act="main">${im.id===c.main?'メイン画像':'メインにする'}</button><button data-act="rmimg">削除</button>`:''}</div><input type="file" id="fimg" accept="image/*" multiple hidden>`:''}`;
+ const sv=f=>f.id==='gender'?svG(f,c):f.id==='birthday'?svB(f,c):sv0(f);const sv0=f=>edit?`<div><dt>${esc(f.label)}</dt><dd><input data-f="${f.id}" value="${esc(c.f[f.id])}"></dd></div>`:`<div><dt>${esc(f.label)}</dt><dd>${esc(c.f[f.id])||'—'}</dd></div>`;
+ const stats=STATS.map(k=>{const v=c.st[k];return edit?`<div class="stat"><small>${k}</small><input type="number" inputmode="numeric" min="0" max="99" data-s="${k}" value="${v==null?'':v}"></div>`:`<div class="stat"><small>${k}</small><b>${v==null||v===''?'—':v}</b><u style="--w:${Math.min(100,(+v||0)/18*100)}%"></u></div>`}).join('');
+ const lg=f=>edit?`<section class="sec"><h3>${esc(f.label)}</h3><textarea data-f="${f.id}">${esc(c.f[f.id])}</textarea></section>`:(c.f[f.id]?`<section class="sec"><h3>${esc(f.label)}</h3><div class="txt">${esc(c.f[f.id])}</div></section>`:'');
+ const music=edit?`<section class="sec"><h3>テーマ曲</h3><input data-k="music" value="${esc(c.music)}" placeholder="YouTube / YouTube Music のURL"></section>`:(c.music?`<section class="sec"><h3>テーマ曲</h3>${playing&&id?`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen title="テーマ曲"></iframe>`:id?`<button data-act="play">テーマ曲を再生</button> `:''}<a href="${esc(c.music)}" target="_blank" rel="noopener">YouTubeで開く</a><p style="color:var(--mu);font-size:.8rem;margin:.4em 0 0">埋め込みが禁止されている曲は再生できません。その場合はリンク先で開いてください。</p></section>`:'');
+ el.innerHTML=`${bar}<div class="hero"><div>${stage}</div><div>${edit?`<input class="name-in" data-k="name" value="${esc(c.name)}" placeholder="名前" aria-label="名前" style="font-size:1.6rem;font-weight:700;margin-bottom:.6em"><div class="colbox"><label for="col">テーマカラー(このキャラのページの差し色になります)</label><div class="row">${PRE.map(p=>`<button class="sw${p===c.color?' on':''}" data-act="setcol" data-c="${p}" style="background:${p}" aria-label="${p}"></button>`).join('')}<input id="col" type="color" data-k="color" value="${esc(c.color)}" aria-label="色を自由に選ぶ"></div></div>`:`<h2 class="name">${esc(c.name||'名称未設定')}</h2>`}<dl class="kv">${short.map(sv).join('')}</dl>${birthInfo(c)}</div></div>
+ <section class="sec"><h3>能力値</h3><div class="stats">${stats}</div></section>${long.map(lg).join('')}${music}`;
+}
+function render(){rList();rDetail();document.body.classList.toggle('det',!!sel&&matchMedia('(max-width:760px)').matches&&document.body.classList.contains('det'))}
+
+function shrink(file){return new Promise(r=>{const u=URL.createObjectURL(file),i=new Image();i.onload=()=>{const k=Math.min(1,900/Math.max(i.width,i.height)),cv=document.createElement('canvas');cv.width=Math.max(1,i.width*k|0);cv.height=Math.max(1,i.height*k|0);cv.getContext('2d').drawImage(i,0,0,cv.width,cv.height);URL.revokeObjectURL(u);r(cv.toDataURL('image/webp',.85))};i.onerror=()=>r(null);i.src=u})}
+function rFields(){
+ $('#frows').innerHTML=S.fields.map((f,i)=>`<div class="frow"><button data-act="fup" data-i="${i}" aria-label="上へ">↑</button><button data-act="fdn" data-i="${i}" aria-label="下へ">↓</button><input data-fi="${i}" data-fk="label" value="${esc(f.label)}" aria-label="項目名"><select data-fi="${i}" data-fk="type" aria-label="種類"><option value="text"${f.type==='text'?' selected':''}>短文</option><option value="long"${f.type==='long'?' selected':''}>長文</option></select><button data-act="fdel" data-i="${i}" aria-label="削除">✕</button></div>`).join('');
+}
+async function download(){let D=null;try{D=await claude.use('downloads')}catch(e){}if(D){try{await D.save({filename:'settei-cho-'+new Date().toISOString().slice(0,10)+'.json',data:JSON.stringify({app:'settei-cho',version:1,...S})});toast('書き出しました')}catch(e){if(!e||e.code!=='declined')toast('書き出しできませんでした')}return}download0()}
+function download0(){
+ const b=new Blob([JSON.stringify({app:'settei-cho',version:1,...S})],{type:'application/json'}),a=document.createElement('a');
+ a.href=URL.createObjectURL(b);a.download='settei-cho-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+
+document.addEventListener('click',async e=>{
+ const t=e.target.closest('[data-act]');if(!t)return;
+ const a=t.dataset.act,c=cur(),i=+t.dataset.i;
+ if(a==='new'){const n={id:uid(),name:'',color:'#d9d9d9',st:{},f:{},imgs:[],main:null,music:''};S.chars.push(n);sel=n.id;edit=true;gi=0;playing=false;document.body.classList.add('det');save()}
+ else if(a==='open'){sel=t.dataset.id;edit=false;playing=false;const k=cur();gi=Math.max(0,k.imgs.findIndex(m=>m.id===k.main));document.body.classList.add('det')}
+ else if(a==='back'){document.body.classList.remove('det')}
+ else if(a==='setcol'){c.color=t.dataset.c;save()}
+ else if(a==='edit'){edit=true}
+ else if(a==='done'){edit=false;save()}
+ else if(a==='del'){if(await ask('「'+(c.name||'名称未設定')+'」を削除しますか?')){S.chars=S.chars.filter(x=>x!==c);sel=null;edit=false;document.body.classList.remove('det');save()}else return}
+ else if(a==='pick'){gi=i}
+ else if(a==='play'){playing=true}
+ else if(a==='main'){c.main=c.imgs[gi].id;save()}
+ else if(a==='rmimg'){const m=c.imgs.splice(gi,1)[0];if(c.main===m.id)c.main=c.imgs[0]?c.imgs[0].id:null;gi=0;save()}
+ else if(a==='addimg'){$('#fimg').click();return}
+ else if(a==='fields'){rFields();$('#dlg').showModal();return}
+ else if(a==='closef'){$('#dlg').close();save()}
+ else if(a==='addf'){S.fields.push(L('f'+uid(),'新しい項目'));rFields();save();return}
+ else if(a==='fup'||a==='fdn'){const j=a==='fup'?i-1:i+1;if(j<0||j>=S.fields.length)return;[S.fields[i],S.fields[j]]=[S.fields[j],S.fields[i]];rFields();save();return}
+ else if(a==='fdel'){if(!await ask('この項目と、全キャラクターの入力内容を削除しますか?'))return;const f=S.fields.splice(i,1)[0];S.chars.forEach(x=>delete x.f[f.id]);rFields();save();return}
+ else if(a==='export'){download();return}
+ else if(a==='import'){$('#fimp').click();return}
+ render();
+});
+document.addEventListener('input',e=>{
+ const t=e.target,c=cur();
+ if(t.dataset.fi!=null){const f=S.fields[+t.dataset.fi];f[t.dataset.fk]=t.value;save();return}
+ if(!c)return;
+ if(t.dataset.bd){c.bd=c.bd||{};c.bd[t.dataset.bd]=+t.value||null;save();rDetail();return}
+ if(t.dataset.k){c[t.dataset.k]=t.value;if(t.dataset.k==='color'){$('#detail').style.setProperty('--ac',t.value);$('#detail').style.setProperty('--acf',fg(t.value))}rList()}
+ else if(t.dataset.f){c.f[t.dataset.f]=t.value;rList()}
+ else if(t.dataset.s){c.st[t.dataset.s]=t.value===''?null:Math.max(0,Math.min(99,+t.value))}
+ else if(t.dataset.im){c.imgs[gi].label=t.value}
+ save();
+});
+document.addEventListener('change',async e=>{
+ const t=e.target,c=cur();
+ if(t.id==='fimg'&&c){for(const f of t.files){const s=await shrink(f);if(!s){toast('読み込めない画像がありました');continue}const m={id:uid(),src:s,label:''};c.imgs.push(m);if(!c.main)c.main=m.id}gi=c.imgs.length-1;save();render()}
+ else if(t.id==='fimp'&&t.files[0]){
+  try{const d=JSON.parse(await t.files[0].text());if(!Array.isArray(d.chars)||!Array.isArray(d.fields))throw 0;
+   if(!await ask('現在のデータを、読み込むファイルの内容で置き換えます。よろしいですか?'))return;
+   S={fields:d.fields,chars:d.chars};sel=null;edit=false;document.body.classList.remove('det');save();render();toast('読み込みました')}
+  catch(x){toast('このファイルは読み込めません。書き出したJSONを選んでください。')}
+  t.value='';
+ }
+});
+let sx=null;
+document.addEventListener('touchstart',e=>{sx=e.target.closest('#stage')?e.touches[0].clientX:null},{passive:true});
+document.addEventListener('touchend',e=>{const c=cur();if(sx==null||!c||c.imgs.length<2)return;const d=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(d)>40){gi=(gi+(d<0?1:c.imgs.length-1))%c.imgs.length;rDetail()}});
+render();
+</script>
 </body>
 </html>
